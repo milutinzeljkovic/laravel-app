@@ -1,0 +1,63 @@
+[localhost] > git rev-parse --abbrev-ref HEAD
+[localhost] < master
+[94.237.95.168] > echo $0
+[94.237.95.168] < bash
+[94.237.95.168] > if [ ! -d /var/www/html/laravel-app ]; then mkdir -p /var/www/html/laravel-app; fi
+[94.237.95.168] > if [ ! -L /var/www/html/laravel-app/current ] && [ -d /var/www/html/laravel-app/current ]; then echo 'true'; fi
+[94.237.95.168] > cd /var/www/html/laravel-app && if [ ! -d .dep ]; then mkdir .dep; fi
+[94.237.95.168] > cd /var/www/html/laravel-app && if [ ! -d releases ]; then mkdir releases; fi
+[94.237.95.168] > cd /var/www/html/laravel-app && if [ ! -d shared ]; then mkdir shared; fi
+[94.237.95.168] > if [ -f /var/www/html/laravel-app/.dep/deploy.lock ]; then echo 'true'; fi
+[94.237.95.168] > touch /var/www/html/laravel-app/.dep/deploy.lock
+[94.237.95.168] > cd /var/www/html/laravel-app && (if [ -h release ]; then echo 'true'; fi)
+[94.237.95.168] < true
+[94.237.95.168] > cd /var/www/html/laravel-app && (rm -rf "$(readlink release)")
+[94.237.95.168] > cd /var/www/html/laravel-app && (rm release)
+[94.237.95.168] > cd /var/www/html/laravel-app && (if [ -d releases ] && [ "$(ls -A releases)" ]; then echo 'true'; fi)
+[94.237.95.168] > cd /var/www/html/laravel-app && (if [ -d /var/www/html/laravel-app/releases/1 ]; then echo 'true'; fi)
+[94.237.95.168] > cd /var/www/html/laravel-app && (date +"%Y%m%d%H%M%S")
+[94.237.95.168] < 20200302124524
+[94.237.95.168] > cd /var/www/html/laravel-app && (echo '20200302124524,1' >> .dep/releases)
+[94.237.95.168] > cd /var/www/html/laravel-app && (mkdir /var/www/html/laravel-app/releases/1)
+[94.237.95.168] > cd /var/www/html/laravel-app && (if [[ $(man ln 2>&1 || ln -h 2>&1 || ln --help 2>&1) =~ '--relative' ]]; then echo 'true'; fi)
+[94.237.95.168] < true
+[94.237.95.168] > cd /var/www/html/laravel-app && (ln -nfs --relative /var/www/html/laravel-app/releases/1 /var/www/html/laravel-app/release)
+[94.237.95.168] > command -v 'git' || which 'git' || type -p 'git'
+[94.237.95.168] < /usr/bin/git
+[94.237.95.168] > /usr/bin/git version
+[94.237.95.168] < git version 2.7.4
+[94.237.95.168] > cd /var/www/html/laravel-app && (if [ -h /var/www/html/laravel-app/release ]; then echo 'true'; fi)
+[94.237.95.168] < true
+[94.237.95.168] > cd /var/www/html/laravel-app && (readlink /var/www/html/laravel-app/release)
+[94.237.95.168] < releases/1
+[94.237.95.168] > cd /var/www/html/laravel-app && (/usr/bin/git clone -b master  --recursive  git@github.com:milutinzeljkovic/laravel-app.git /var/www/html/laravel-app/releases/1 2>&1)
+[Symfony\Component\Process\Exception\ProcessFailedException] The command "ssh -A -tt -i ~/.ssh/deployerkey deployer@94.237.95.168 'cd /var/www/html/laravel-app && (/usr/bin/git clone -b master  --recursive  git@github.com:milutinzeljkovic/laravel-app.git /var/www/html/laravel-app/releases/1 2>&1)'" failed.
+
+Exit Code: 128(Invalid exit argument)
+
+Working directory: /Users/milutinzeljkovic/laravel-app
+
+Output:
+================
+
+
+Error Output:
+================
+
+#0 phar:///usr/local/bin/dep/src/Ssh/Client.php(75): Symfony\Component\Process\Process->mustRun()
+#1 phar:///usr/local/bin/dep/src/functions.php(304): Deployer\Ssh\Client->run(Object(Deployer\Host\Host), ''cd /var/www/ht...', Array)
+#2 phar:///usr/local/bin/dep/recipe/deploy/update_code.php(96): Deployer\run('cd /var/www/htm...', Array)
+#3 [internal function]: Deployer\Deployer::Deployer\{closure}()
+#4 phar:///usr/local/bin/dep/src/Task/Task.php(105): call_user_func(Object(Closure))
+#5 phar:///usr/local/bin/dep/src/Executor/SeriesExecutor.php(60): Deployer\Task\Task->run(Object(Deployer\Task\Context))
+#6 phar:///usr/local/bin/dep/src/Console/TaskCommand.php(144): Deployer\Executor\SeriesExecutor->run(Array, Array)
+#7 phar:///usr/local/bin/dep/vendor/symfony/console/Command/Command.php(255): Deployer\Console\TaskCommand->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Deployer\Console\Output\OutputWatcher))
+#8 phar:///usr/local/bin/dep/vendor/symfony/console/Application.php(924): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Deployer\Console\Output\OutputWatcher))
+#9 phar:///usr/local/bin/dep/src/Console/Application.php(133): Symfony\Component\Console\Application->doRunCommand(Object(Deployer\Console\TaskCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Deployer\Console\Output\OutputWatcher))
+#10 phar:///usr/local/bin/dep/vendor/symfony/console/Application.php(265): Deployer\Console\Application->doRunCommand(Object(Deployer\Console\TaskCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Deployer\Console\Output\OutputWatcher))
+#11 phar:///usr/local/bin/dep/vendor/symfony/console/Application.php(141): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#12 phar:///usr/local/bin/dep/src/Deployer.php(326): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 phar:///usr/local/bin/dep/bin/dep(134): Deployer\Deployer::run('6.7.3', '/Users/milutinz...')
+#14 /usr/local/bin/dep(4): require('phar:///usr/loc...')
+#15 {main}
+[94.237.95.168] > rm -f /var/www/html/laravel-app/.dep/deploy.lock
